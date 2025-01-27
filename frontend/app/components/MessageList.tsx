@@ -1,26 +1,50 @@
-"use client";
-import { Message } from "../types";
-import { MessageBubble } from "./MessageBubble";
-import { RefObject } from "react";
+'use client';
 
-interface MessageListProps {
-    messages: Message[];
-    messageListRef: RefObject<HTMLUListElement>;
-    removeMessage: (id: number) => void;
-    editMessage: (id: number, content: string) => void;
+import { RefObject } from 'react';
+
+import { Message } from '../types';
+import { MessageBubble } from './MessageBubble';
+
+interface TempMessage extends Omit<Message, 'user_id'> {
+  isTemp?: boolean;
 }
 
-export const MessageList = ({ messages, messageListRef, removeMessage, editMessage }: MessageListProps) => {
-    return (
-        <ul className="flex flex-1 flex-col gap-4 text-sm custom-scrollbar pr-2 pl-4 overflow-y-scroll" ref={messageListRef}>
-            {messages.map((message) => (
-                <MessageBubble
-                    key={message.id}
-                    message={message}
-                    handleDeleteMessage={removeMessage}
-                    handleUpdateMessage={editMessage}
-                />
-            ))}
-        </ul>
-    );
-}; 
+interface MessageListProps {
+  messages: (Message | TempMessage)[];
+  messageListRef: RefObject<HTMLDivElement>;
+  removeMessage: (id: number) => void;
+  editMessage: (id: number, content: string) => void;
+}
+
+export const MessageList = ({
+  messages,
+  messageListRef,
+  removeMessage,
+  editMessage,
+}: MessageListProps) => {
+  console.log('Messages in MessageList:', JSON.stringify(messages, null, 2));
+
+  return (
+    <div ref={messageListRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      {messages.length === 0 ? (
+        <div key="empty-message" className="text-center text-gray-500">
+          No messages yet
+        </div>
+      ) : (
+        messages.map((message) => {
+          const key =
+            'isTemp' in message && message.isTemp ? `temp-${message.id}` : `message-${message.id}`;
+
+          return (
+            <MessageBubble
+              key={key}
+              message={message}
+              onDelete={removeMessage}
+              onEdit={editMessage}
+            />
+          );
+        })
+      )}
+    </div>
+  );
+};
