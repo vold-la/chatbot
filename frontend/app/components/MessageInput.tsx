@@ -1,8 +1,10 @@
-"use client";
-import { useState } from "react";
-import { Message } from "../types";
-import Button from "./Button";
-import { PiPaperPlaneRight } from "react-icons/pi";
+'use client';
+
+import { useState } from 'react';
+import { PiPaperPlaneRight } from 'react-icons/pi';
+
+import { Message } from '../types';
+import Button from './Button';
 
 interface MessageInputProps {
   message?: Message;
@@ -10,15 +12,19 @@ interface MessageInputProps {
   handleMessageUpdate?: (id: number, content: string) => void;
 }
 
-export const MessageInput = ({ message, handleMessageSubmit, handleMessageUpdate }: MessageInputProps) => {
-  const [inputText, setInputText] = useState<string>(message ? message.content : "");
+export const MessageInput = ({
+  message,
+  handleMessageSubmit,
+  handleMessageUpdate,
+}: MessageInputProps) => {
+  const [inputText, setInputText] = useState<string>(message ? message.content : '');
 
   const submitMessage = () => {
     if (message && handleMessageUpdate) {
       handleMessageUpdate(message.id, inputText);
     } else if (handleMessageSubmit) {
       handleMessageSubmit(inputText);
-      setInputText("");
+      setInputText('');
     }
   };
 
@@ -32,7 +38,7 @@ export const MessageInput = ({ message, handleMessageSubmit, handleMessageUpdate
         className="flex-1 flex"
       >
         <input
-          placeholder={!message ? "Your question" : ""}
+          placeholder={!message ? 'Your question' : ''}
           type="text"
           className="flex-1 px-2 py-1 rounded-full ring-gray-700 text-sm focus:outline-none focus:ring-[1px] "
           value={inputText}
