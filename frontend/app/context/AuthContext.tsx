@@ -21,18 +21,9 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('authToken');
-    }
-    return null;
-  });
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return !!localStorage.getItem('authToken');
-    }
-    return false;
-  });
+  const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const login = (newToken: string) => {
@@ -53,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const verifyToken = async () => {
       const storedToken = localStorage.getItem('authToken');
       if (!storedToken) {
-        logout();
+        setIsLoading(false);
         return;
       }
 
@@ -75,12 +66,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsAuthenticated(true);
       } catch (error) {
         console.error('Token verification failed:', error);
-        logout();
+        localStorage.removeItem('authToken');
+        setToken(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     verifyToken();
   }, []);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <AuthContext.Provider value={{ token, isAuthenticated, login, logout }}>
