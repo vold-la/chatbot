@@ -27,10 +27,12 @@ export const InputSection = ({ sendMessage }: InputSectionProps) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
           className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
+          data-testid="message-input"
         />
         <button
           type="submit"
           className="p-2 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
+          data-testid="send-button"
         >
           <PiPaperPlaneRight size={20} />
         </button>

@@ -9,7 +9,10 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "cd .. && husky install frontend/.husky"
+    "prepare": "cd .. && husky install frontend/.husky",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:run"
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -23,14 +26,16 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.1",
-    "@types/node": "^20",
+    "@types/node": "^20.17.16",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cypress": "^14.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "start-server-and-test": "^2.0.10"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

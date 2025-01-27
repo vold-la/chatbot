@@ -21,7 +21,7 @@ export const ChatControls = ({ isOpen, toggleFullscreen, toggleChatWindow }: Cha
         <span className="px-2 font-semibold tracking-tight">Chat with Ava</span>
       )}
 
-      <Button handleClick={toggleChatWindow} size={28}>
+      <Button handleClick={toggleChatWindow} size={28} data-testid="toggle-chat">
         {isOpen ? <PiMinus size={16} /> : <PiPlus size={16} />}
       </Button>
     </div>
