@@ -11,9 +11,11 @@ from jwt.exceptions import InvalidTokenError
 
 app = FastAPI()
 
+origins = ["http://localhost:3000", "https://chatbot-drab-five.vercel.app"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -211,3 +213,8 @@ async def update_message(
     db.commit()
     db.refresh(db_message)
     return db_message
+
+
+@app.get("/test")
+async def test_endpoint():
+    return {"status": "success", "message": "API is working!"}
