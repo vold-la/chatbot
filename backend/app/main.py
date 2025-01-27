@@ -11,7 +11,6 @@ from jwt.exceptions import InvalidTokenError
 
 app = FastAPI()
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -20,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create tables
 SQLModel.metadata.create_all(engine)
 
 
@@ -29,8 +27,7 @@ def get_session():
         yield session
 
 
-# JWT settings
-SECRET_KEY = "your-secret-key"  # In production, use a secure secret key
+SECRET_KEY = "chdicncciwcwcuuieowjncd"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -77,7 +74,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 @app.post("/api/auth/signup")
 async def signup(user: UserCreate, db: Session = Depends(get_session)):
     try:
-        # Check if user already exists
         existing_user = db.exec(select(User).where(User.email == user.email)).first()
         if existing_user:
             raise HTTPException(
@@ -85,7 +81,6 @@ async def signup(user: UserCreate, db: Session = Depends(get_session)):
                 detail="Email already registered",
             )
 
-        # Create new user
         password_hash, salt = User.hash_password(user.password)
         db_user = User(
             email=user.email, name=user.name, password_hash=password_hash, salt=salt
@@ -94,7 +89,6 @@ async def signup(user: UserCreate, db: Session = Depends(get_session)):
         db.commit()
         db.refresh(db_user)
 
-        # Create access token
         access_token = create_access_token(
             data={"sub": user.email},
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
@@ -133,15 +127,12 @@ async def get_messages(
     current_user: User = Depends(get_current_user), db: Session = Depends(get_session)
 ):
     messages = db.exec(select(Message).where(Message.user_id == current_user.id)).all()
-    # Debug logging
     for msg in messages:
         print(
             f"Message ID: {msg.id}, Content: {msg.content}, Deleted: {msg.deleted_at is not None}"
         )
         print(f"Full message dict: {msg.to_dict()}")
-    return [
-        msg.to_dict() for msg in messages
-    ]  # Make sure we're returning the dict version
+    return [msg.to_dict() for msg in messages]
 
 
 def get_bot_response(message: str) -> str:
@@ -154,7 +145,6 @@ async def create_message(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_session),
 ):
-    # Create user message
     db_message = Message(
         content=message.content,
         user_id=current_user.id,
@@ -166,7 +156,6 @@ async def create_message(
     db.commit()
     db.refresh(db_message)
 
-    # Create bot response
     bot_response = get_bot_response(message.content)
     bot_message = Message(
         content=bot_response,
@@ -196,7 +185,6 @@ async def delete_message(
             status_code=403, detail="Not authorized to delete this message"
         )
 
-    # Instead of deleting, mark as deleted with timestamp
     message.deleted_at = datetime.now()
     db.commit()
     db.refresh(message)

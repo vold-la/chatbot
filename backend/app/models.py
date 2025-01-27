@@ -43,7 +43,7 @@ class User(UserBase, table=True):
 
 class MessageBase(SQLModel):
     content: str
-    sender: str = "user"  # Default to user, bot messages will override this
+    sender: str = "user"
 
 
 class Message(MessageBase, table=True):
