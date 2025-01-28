@@ -43,9 +43,10 @@ export const MessageInput = ({
           className="flex-1 px-2 py-1 rounded-full ring-gray-700 text-sm focus:outline-none focus:ring-[1px] "
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
+          data-testid="message-input"
         />
       </form>
-      <Button handleClick={submitMessage} size={28}>
+      <Button handleClick={submitMessage} size={28} data-testid="send-button">
         <PiPaperPlaneRight size={16} />
       </Button>
     </div>

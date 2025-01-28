@@ -9,6 +9,10 @@ A modern chat interface built with Next.js and FastAPI, featuring message update
 - Python 3.10+
 - Docker (optional)
 
+clone the repository
+```bash
+git clone https://github.com/vold-la/chatbot.git
+```
 
 ### Using Docker
 
@@ -21,9 +25,8 @@ docker-compose up --build
 
 ### Running Locally
 
-1. Clone the repository:
+1. change directory
 ```bash
-git clone https://github.com/vold-la/chatbot.git
 cd artisan
 ```
 
@@ -47,6 +50,21 @@ npm run dev
 
 - Frontend runs on `http://localhost:3000`
 - Backend API runs on `http://localhost:8000`
+
+## Testing
+
+### Frontend Tests
+```bash
+cd frontend
+npm run cypress:open
+```
+
+### Backend Tests
+```bash
+cd backend
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+python -m pytest tests/test_main.py -v
+```
 
 ## Tech Stack
 

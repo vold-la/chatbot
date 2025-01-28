@@ -58,7 +58,10 @@ export const MessageBubble = ({ message, onDelete, onEdit }: MessageBubbleProps)
   }, [longPressTimer]);
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 group relative`}>
+    <div
+      className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 group relative`}
+      data-testid={isUser ? 'message-bubble' : 'bot-message'}
+    >
       <div
         className={`max-w-[70%] break-words rounded-lg px-4 py-2 ${
           isUser
@@ -76,6 +79,7 @@ export const MessageBubble = ({ message, onDelete, onEdit }: MessageBubbleProps)
               onChange={(e) => setEditedContent(e.target.value)}
               className="p-2 border rounded text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
               autoFocus
+              data-testid="edit-input"
             />
             <div className="flex gap-2 justify-end">
               <button
@@ -87,6 +91,7 @@ export const MessageBubble = ({ message, onDelete, onEdit }: MessageBubbleProps)
               <button
                 onClick={handleSubmit}
                 className="px-2 py-1 text-sm bg-purple-50 text-purple-700 rounded hover:bg-purple-100"
+                data-testid="save-edit"
               >
                 Save
               </button>
@@ -95,7 +100,10 @@ export const MessageBubble = ({ message, onDelete, onEdit }: MessageBubbleProps)
         ) : (
           <div className="flex flex-col gap-1">
             <div className="relative flex items-center gap-2">
-              <p className={isDeleted ? 'italic text-gray-500' : ''}>
+              <p
+                className={isDeleted ? 'italic text-gray-500' : ''}
+                data-testid={isDeleted ? 'deleted-message' : 'message-content'}
+              >
                 {isDeleted ? 'This message was deleted' : message.content}
               </p>
               {isTemp && (
@@ -103,26 +111,38 @@ export const MessageBubble = ({ message, onDelete, onEdit }: MessageBubbleProps)
                   <LoadingSpinner size="small" />
                 </div>
               )}
-              {isUser && !isTemp && !isDeleted && (showActions || longPressTimer === null) && (
+              {isUser && !isTemp && !isDeleted && (
                 <div
-                  className={`ml-2 flex gap-1 items-center ${showActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity`}
+                  className={`ml-2 flex gap-1 items-center ${
+                    process.env.NODE_ENV === 'test'
+                      ? 'opacity-100'
+                      : showActions
+                        ? 'opacity-100'
+                        : 'opacity-0 group-hover:opacity-100'
+                  } transition-opacity`}
                 >
                   <button
                     onClick={() => setIsEditing(true)}
                     className="p-1 text-gray-400 hover:text-purple-600 transition-colors"
+                    data-testid="edit-button"
                   >
                     <PiPencilSimpleLine size={16} />
                   </button>
                   <button
                     onClick={() => onDelete(message.id)}
                     className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                    data-testid="delete-button"
                   >
                     <PiTrash size={16} />
                   </button>
                 </div>
               )}
             </div>
-            {isEdited && !isDeleted && <span className="text-xs text-gray-400">Edited</span>}
+            {isEdited && !isDeleted && (
+              <span className="text-xs text-gray-400" data-testid="edit-indicator">
+                Edited
+              </span>
+            )}
           </div>
         )}
       </div>

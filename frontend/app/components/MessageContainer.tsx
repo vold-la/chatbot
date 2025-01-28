@@ -174,6 +174,7 @@ const MessageContainer = () => {
               : 'w-[400px] h-[700px]'
             : 'w-[400px] h-fit'
         } flex flex-col justify-between bg-white shadow-xl font-medium`}
+      data-testid="chat-container"
     >
       <ChatControls
         isOpen={isOpen}

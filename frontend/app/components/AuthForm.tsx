@@ -74,6 +74,7 @@ export const AuthForm = () => {
               onChange={(e) => setName(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               required={isSignUp}
+              data-testid="name-input"
             />
           </div>
         )}
@@ -89,6 +90,7 @@ export const AuthForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             required
+            data-testid="email-input"
           />
         </div>
 
@@ -103,6 +105,7 @@ export const AuthForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
             required
+            data-testid="password-input"
           />
         </div>
 
@@ -111,6 +114,7 @@ export const AuthForm = () => {
         <button
           type="submit"
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          data-testid="auth-submit"
         >
           {isSignUp ? 'Sign Up' : 'Sign In'}
         </button>
@@ -120,6 +124,7 @@ export const AuthForm = () => {
         <button
           onClick={() => setIsSignUp(!isSignUp)}
           className="text-sm text-purple-600 hover:text-purple-500"
+          data-testid="auth-toggle"
         >
           {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
         </button>
